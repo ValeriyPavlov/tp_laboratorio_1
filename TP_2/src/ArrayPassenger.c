@@ -176,12 +176,10 @@ int sortPassengers(Passenger* list, int len, int order)
 	return retorno;
 }
 
-int printPassengers(Passenger* list, int length, eFlight* listF, int lenF)
+int printPassengers(Passenger* list, int length, eFlight* listF, int lenF, eTypePassenger* listT, int lenT)
 {
 	int retorno = -1;
-	int i, j;
-	char tipo[51];
-	char status[51];
+	int i, j, k;
 
 	if(list != NULL && length > 0)
 	{
@@ -190,43 +188,19 @@ int printPassengers(Passenger* list, int length, eFlight* listF, int lenF)
 		{
 			if(list[i].isEmpty == OCUPADO)
 			{
-				if(list[i].typePassenger == 11)
+				for(k = 0; k < lenT; k++)
 				{
-					strcpy(tipo, "ECONOMICA");
-				}
-				else
-				{
-					if(list[i].typePassenger == 12)
+					if(list[i].typePassenger == listT[k].idtype)
 					{
-						strcpy(tipo, "EJECUTIVA");
-					}
-					else
-					{
-						strcpy(tipo, "PRIMERA_CLASE");
-					}
-				}
-				for(j = 0; j < lenF; j++)
-				{
-					if(strcmp(listF[j].flycode, list[i].flycode) == 0)
-					{
-						if(listF[j].statusFlight == 20)
+						for(j = 0; j < lenF; j++)
 						{
-							strcpy(status, "ACTIVO");
-						}
-						else
-						{
-							if(listF[j].statusFlight == 21)
+							if(strcmp(listF[j].flycode, list[i].flycode) == 0)
 							{
-								strcpy(status, "DEMORADO");
-							}
-							else
-							{
-								strcpy(status, "CANCELADO");
+								printf("%d\t%s\t\t%s\t%.2f\t %s\t%s\t%s\n", list[i].id, list[i].lastName, list[i].name, list[i].price, list[i].flycode, listT[k].descripcion, listF[j].descripcion);
 							}
 						}
 					}
 				}
-				printf("%d\t%s\t\t%s\t%.2f\t %s\t%s\t%s\n", list[i].id, list[i].lastName, list[i].name, list[i].price, list[i].flycode, tipo, status);
 			}
 		}
 		retorno = 0;
@@ -285,6 +259,7 @@ int cargaVuelos(eFlight* lista, int len)
     int i;
     char flycodes[][10] = {"ATR-94521", "XER-05073", "IKQ-70952", "DMR-83501", "CNL-71901"};
     int statusFlights[] = {20, 20, 20, 21, 22};
+    char desc[][15] = {"ACTIVO", "ACTIVO", "ACTIVO", "DEMORADO", "CANCELADO"};
 
     if(lista != NULL && len > 0)
     {
@@ -292,11 +267,32 @@ int cargaVuelos(eFlight* lista, int len)
     	{
             strcpy(lista[i].flycode, flycodes[i]);
             lista[i].statusFlight = statusFlights[i];
+            strcpy(lista[i].descripcion, desc[i]);
     	}
     	retorno = 0;
     }
     return retorno;
 }
+
+int cargarTipos(eTypePassenger lista[], int len)
+{
+	int retorno = -1;
+	int i;
+	int id[] = {11, 12, 13};
+	char desc[][15] = {"ECONOMICA", "EJECUTIVA", "PRIMERA CLASE"};
+
+	if(lista != NULL && len > 0)
+	{
+		for(i = 0; i < len; i++)
+		{
+            lista[i].idtype = id[i];
+            strcpy(lista[i].descripcion, desc[i]);
+		}
+		retorno = 0;
+	}
+	return retorno;
+}
+
 
 int cargaForzada(Passenger* list, int len)
 {
@@ -357,7 +353,7 @@ int alta(Passenger* list, int len)
         {
         	printf("Error no se pudo tomar el dato del precio.\n");
         }
-        if(utn_getNumeroInt(&tipo, "11. ECONOMICA  12. EJECUTIVA  13. PRIMERA_CLASE\nIngrese el tipo: ", "Error, numero fuera de rango, reingrese: ", 11, 13, 5) != 0)
+        if(utn_getNumeroInt(&tipo, "11. ECONOMICA  12. EJECUTIVA  13. PRIMERA CLASE\nIngrese el tipo: ", "Error, numero fuera de rango, reingrese: ", 11, 13, 5) != 0)
         {
         	printf("Error no se pudo tomar el dato del tipo de pasajero.\n");
         }
@@ -378,14 +374,14 @@ int alta(Passenger* list, int len)
 	return retorno;
 }
 
-int baja(Passenger lista[], int tam, eFlight listaF[], int tamF)
+int baja(Passenger lista[], int tam, eFlight listaF[], int tamF, eTypePassenger listaT[], int tamT)
 {
 	int retorno = -1;
 	int indice;
 
 	if(lista != NULL && tam > 0)
 	{
-		printPassengers(lista, tam, listaF, tamF);
+		printPassengers(lista, tam, listaF, tamF, listaT, tamT);
 		utn_getNumeroInt(&indice, "Ingrese el id del pasajero a dar de baja: ", "Error, numero fuera de rango, reingrese: ", 1, CANT, 3);
 		if(removePassenger(lista, tam, indice) == 0)
 		{
@@ -395,7 +391,7 @@ int baja(Passenger lista[], int tam, eFlight listaF[], int tamF)
 	return retorno;
 }
 
-int modificacion(Passenger lista[], int tam, eFlight listaF[], int tamF)
+int modificacion(Passenger lista[], int tam, eFlight listaF[], int tamF, eTypePassenger listaT[], int tamT)
 {
     int retorno = -1;
     int i;
@@ -411,7 +407,7 @@ int modificacion(Passenger lista[], int tam, eFlight listaF[], int tamF)
 
     if(lista != NULL && tam > 0)
     {
-    	printPassengers(lista, tam, listaF, tamF);
+    	printPassengers(lista, tam, listaF, tamF, listaT, tamT);
     	utn_getNumeroInt(&indice, "Ingrese el id del pasajero a modificar: ", "Error, numero fuera de rango, reingrese: ", 1, CANT, 3);
     	if(findPassengerById(lista, tam, indice) != -1)
     	{
@@ -450,7 +446,7 @@ int modificacion(Passenger lista[], int tam, eFlight listaF[], int tamF)
     					retorno = 0;
     					break;
     				case 'D':
-    					utn_getNumeroInt(&tipo, "11. ECONOMICA  12. EJECUTIVA  13. PRIMERA_CLASE\nIngrese el tipo: ", "Error, numero fuera de rango, reingrese: ", 11, 13, 5);
+    					utn_getNumeroInt(&tipo, "11. ECONOMICA  12. EJECUTIVA  13. PRIMERA CLASE\nIngrese el tipo: ", "Error, numero fuera de rango, reingrese: ", 11, 13, 5);
     					lista[i].typePassenger = tipo;
     					retorno = 0;
     					break;
@@ -487,14 +483,14 @@ int promedios(Passenger lista[], int tam)
 				total += lista[i].price;
 			}
 		}
+		promedio = total / contador;
 		for(i = 0; i < tam; i++)
 		{
-			if(lista[i].price > promedio)
+			if(lista[i].isEmpty == OCUPADO && lista[i].price > promedio)
 			{
 				contadorChetos++;
 			}
 		}
-		promedio = total / contador;
 		printf("El precio total de los pasajes es de: $%.2f\n", total);
 		printf("El promedio de los precios de pasajes es de: $%.2f\n", promedio);
 		printf("Cantidad de pasajeros que superan el precio promedio: %d\n", contadorChetos);
@@ -504,11 +500,10 @@ int promedios(Passenger lista[], int tam)
 }
 
 
-int listarVuelosActivos(Passenger* list, int length, eFlight* listF, int lenF)
+int listarVuelosActivos(Passenger* list, int length, eFlight* listF, int lenF, eTypePassenger listT[], int lenT)
 {
 	int retorno = -1;
-	int i, j;
-	char tipo[51];
+	int i, j, k;
 
 	if(list != NULL && length > 0)
 	{
@@ -517,28 +512,19 @@ int listarVuelosActivos(Passenger* list, int length, eFlight* listF, int lenF)
 		{
 			if(list[i].isEmpty == OCUPADO)
 			{
-				if(list[i].typePassenger == 11)
+				for(k = 0; k < lenT; k++)
 				{
-					strcpy(tipo, "ECONOMICA");
-				}
-				else
-				{
-					if(list[i].typePassenger == 12)
+					if(list[i].typePassenger == listT[k].idtype)
 					{
-						strcpy(tipo, "EJECUTIVA");
-					}
-					else
-					{
-						strcpy(tipo, "PRIMERA_CLASE");
-					}
-				}
-				for(j = 0; j < lenF; j++)
-				{
-					if(strcmp(listF[j].flycode, list[i].flycode) == 0)
-					{
-						if(listF[j].statusFlight == 20)
+						for(j = 0; j < lenF; j++)
 						{
-							printf("%d\t%s\t\t%s\t%.2f\t %s\t%s\tACTIVO\n", list[i].id, list[i].lastName, list[i].name, list[i].price, list[i].flycode, tipo);
+							if(strcmp(listF[j].flycode, list[i].flycode) == 0)
+							{
+								if(listF[j].statusFlight == 20)
+								{
+									printf("%d\t%s\t\t%s\t%.2f\t %s\t%s\t%s\n", list[i].id, list[i].lastName, list[i].name, list[i].price, list[i].flycode, listT[k].descripcion, listF[j].descripcion);
+								}
+							}
 						}
 					}
 				}

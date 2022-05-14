@@ -24,6 +24,7 @@ int main(void)
     int subOpcion;
 	Passenger pasajeros[CANT];
 	eFlight vuelos[5];
+	eTypePassenger tipos[3];
 	
 	if(initPassengers(pasajeros, CANT) != 0)
 	{
@@ -32,6 +33,10 @@ int main(void)
 	if(cargaVuelos(vuelos, 5) != 0)
 	{
 		printf("Error al cargar la lista de vuelos.\n");
+	}
+	if(cargarTipos(tipos, 3) != 0)
+	{
+		printf("Error al cargar la lista de tipos.\n");
 	}
 	if(cargaForzada(pasajeros, CANT) != 0)
 	{
@@ -56,7 +61,7 @@ int main(void)
 		case 2:
 			if(existenPasajeros(pasajeros, CANT) > 0)
 			{
-				if(modificacion(pasajeros, CANT, vuelos, 5) != 0)
+				if(modificacion(pasajeros, CANT, vuelos, 5, tipos, 3) != 0)
 				{
 					printf("Error al realizar la modificacion.\n");
 				}
@@ -73,7 +78,7 @@ int main(void)
 		case 3:
 			if(existenPasajeros(pasajeros, CANT) > 0)
 			{
-				if(baja(pasajeros, CANT, vuelos, 5) == 0)
+				if(baja(pasajeros, CANT, vuelos, 5, tipos, 3) == 0)
 				{
 					printf("Se dio de baja con exito.\n");
 				}
@@ -96,7 +101,7 @@ int main(void)
 				case 1:
 					if(sortPassengers(pasajeros, CANT, 1) == 0)
 					{
-						printPassengers(pasajeros, CANT, vuelos, 5);
+						printPassengers(pasajeros, CANT, vuelos, 5, tipos, 3);
 					}
 					break;
 				case 2:
@@ -108,7 +113,7 @@ int main(void)
 				case 3:
 					if(sortPassengersByCode(pasajeros, CANT, 1) == 0)
 					{
-						listarVuelosActivos(pasajeros, CANT, vuelos, 5);
+						listarVuelosActivos(pasajeros, CANT, vuelos, 5, tipos, 3);
 					}
 					break;
 				}

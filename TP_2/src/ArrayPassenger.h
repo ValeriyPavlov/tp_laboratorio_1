@@ -3,8 +3,15 @@
 
 typedef struct
 {
+	int idtype;
+	char descripcion[15];
+}eTypePassenger;
+
+typedef struct
+{
 	char flycode[10];
 	int statusFlight;
+	char descripcion[15];
 }eFlight;
 
 typedef struct
@@ -69,8 +76,10 @@ int sortPassengers(Passenger* list, int len, int order);
 /// @param length Array length.
 /// @param listF Pointer to array of flights.
 /// @param lenF Array length.
+/// @param listT Pointer to array of Passenger types.
+/// @param lenT Array length.
 /// @return Returns -1 if error (invalid length or NULL pointer), - 0 if Ok.
-int printPassengers(Passenger* list, int length, eFlight* listF, int lenF);
+int printPassengers(Passenger* list, int length, eFlight* listF, int lenF, eTypePassenger* listT, int lenT);
 
 /// @brief Sort the elements in the array of passengers, the argument order indicates UP or DOWN order.
 /// @param list Pointer to array of passengers.
@@ -84,6 +93,12 @@ int sortPassengersByCode(Passenger* list, int len, int order);
 /// @param len Array length.
 /// @return Returns -1 if error (invalid length or NULL pointer), - 0 if Ok.
 int cargaVuelos(eFlight lista[], int len);
+
+/// @brief Hardcode of the Passenger types.
+/// @param lista Pointer to the array of types.
+/// @param len Array length.
+/// @return Returns -1 if error (invalid length or NULL pointer), - 0 if Ok.
+int cargarTipos(eTypePassenger lista[], int len);
 
 /// @brief Hardcode of the 5 Passengers.
 /// @param list Pointer to array of passengers.
@@ -102,16 +117,20 @@ int alta(Passenger* list, int len);
 /// @param tam Array length.
 /// @param listaF Pointer to array of flights.
 /// @param tamF Array length.
+/// @param listaT Pointer to array of types.
+/// @param tamT Array length.
 /// @return Returns -1 if error (invalid length or NULL pointer), - 0 if Ok.
-int baja(Passenger lista[], int tam, eFlight listaF[], int tamF);
+int baja(Passenger lista[], int tam, eFlight listaF[], int tamF, eTypePassenger listaT[], int tamT);
 
 /// @brief Realiza la modificacion de uno de los datos del pasajero.
 /// @param lista Pointer to array of passengers.
 /// @param tam Array length.
 /// @param listaF Pointer to array of flights.
 /// @param tamF Array length.
+/// @param listaT Pointer to array of types.
+/// @param tamT Array length.
 /// @return Returns -1 if error (invalid length or NULL pointer), - 0 if Ok.
-int modificacion(Passenger lista[], int tam, eFlight listaF[], int tamF);
+int modificacion(Passenger lista[], int tam, eFlight listaF[], int tamF, eTypePassenger listaT[], int tamT);
 
 /// @brief Calcula y muestra los promedios, totales de precios y pasajeros con precio arriba del primedio.
 /// @param lista Pointer to array of passengers.
@@ -124,8 +143,10 @@ int promedios(Passenger lista[], int tam);
 /// @param length Array length.
 /// @param listF Pointer to array of flights.
 /// @param lenF Array length.
+/// @param listT Pointer to array of types.
+/// @param lenT Array length.
 /// @return Returns -1 if error (invalid length or NULL pointer), - 0 if Ok.
-int listarVuelosActivos(Passenger* list, int length, eFlight* listF, int lenF);
+int listarVuelosActivos(Passenger* list, int length, eFlight* listF, int lenF, eTypePassenger listT[], int lenT);
 
 /// @brief Chequea que existan pasajeros cargados, para evitar que accedan a las opciones si no los hay.
 /// @param lista Pointer to array of passengers.
