@@ -543,7 +543,8 @@ int existenPasajeros(Passenger lista[], int tam)
 	{
 		if(lista[i].isEmpty == OCUPADO)
 		{
-			retorno++;
+			retorno = 1;
+			break;
 		}
 	}
 	return retorno;

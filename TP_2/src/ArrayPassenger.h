@@ -151,7 +151,7 @@ int listarVuelosActivos(Passenger* list, int length, eFlight* listF, int lenF, e
 /// @brief Chequea que existan pasajeros cargados, para evitar que accedan a las opciones si no los hay.
 /// @param lista Pointer to array of passengers.
 /// @param tam Array length.
-/// @return Returns the number of existing, ACTIVE passengers.
+/// @return Returns 0 if there is no passengers, and 1 if there is at least 1.
 int existenPasajeros(Passenger lista[], int tam);
 
 #endif /* ARRAYPASSENGER_H_ */
